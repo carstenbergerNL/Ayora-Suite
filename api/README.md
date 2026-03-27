@@ -34,3 +34,7 @@ This folder contains the Visual Studio solution `Ayora.sln` and all .NET project
 
 If you add/remove projects, modules, or change layering rules/contracts, update this file.
 
+## Local secrets (recommended)
+
+Do not commit database passwords. Use .NET user-secrets (project: `Ayora.Api`) or environment variables.
+

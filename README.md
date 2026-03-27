@@ -17,6 +17,7 @@ Production-ready modular ASP.NET Core 10 Web API foundation using **Dapper + SQL
 ## Security configuration
 
 - Set a strong JWT signing key via config before running (do not keep secrets in git). Prefer environment variables or user-secrets for local development.
+- For local/dev SQL Server credentials, use **.NET user-secrets** (recommended) instead of committing passwords to `appsettings*.json`.
 
 ## Build
 

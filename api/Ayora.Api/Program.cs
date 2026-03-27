@@ -8,10 +8,26 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
+using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(ctx.Configuration));
+builder.Host.UseSerilog((ctx, cfg) =>
+{
+    cfg.ReadFrom.Configuration(ctx.Configuration);
+
+    var hasConsoleSink = ctx.Configuration
+        .GetSection("Serilog:WriteTo")
+        .GetChildren()
+        .Any(s => string.Equals(s["Name"], "Console", StringComparison.OrdinalIgnoreCase));
+
+    if (!hasConsoleSink)
+    {
+        cfg.MinimumLevel.Override("Microsoft", LogEventLevel.Warning);
+        cfg.MinimumLevel.Override("System", LogEventLevel.Warning);
+        cfg.WriteTo.Console();
+    }
+});
 
 builder.Services.AddControllers();
 
@@ -35,6 +51,28 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(Ayora.Api.Swagger.SwaggerConfig.Configure);
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("DefaultCors", policy =>
+    {
+        var origins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? Array.Empty<string>();
+
+        if (origins.Length == 0)
+        {
+            policy
+                .AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+            return;
+        }
+
+        policy
+            .WithOrigins(origins)
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
 
 builder.Services.AddShared();
 builder.Services.AddApplication();
@@ -80,6 +118,8 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("DefaultCors");
 
 app.UseAuthentication();
 app.UseAuthorization();
