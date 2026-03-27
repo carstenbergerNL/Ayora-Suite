@@ -1,0 +1,10 @@
+Always follow clean architecture
+Always use Dapper (never EF)
+Always update /sql/main.sql when schema changes
+Always update /json files when DTO changes
+Always keep README.md files up to date (root, /api, /sql, /json)
+Always keep modules extensible
+Never place business logic in controllers
+Always use services and repositories
+Always use async methods
+Always use DTOs for API boundaries
