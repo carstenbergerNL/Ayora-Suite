@@ -38,3 +38,7 @@ If you add/remove projects, modules, or change layering rules/contracts, update 
 
 Do not commit database passwords. Use .NET user-secrets (project: `Ayora.Api`) or environment variables.
 
+## Example configuration
+
+Use `Ayora.Api/appsettings.Example.json` as a reference for all available settings. Do not put real secrets in the example file.
+

@@ -3,6 +3,7 @@ Always use Dapper (never EF)
 Always update /sql/main.sql when schema changes
 Always update /json files when DTO changes
 Always keep README.md files up to date (root, /api, /sql, /json)
+Always keep api/Ayora.Api/appsettings.Example.json up to date with the current configuration surface (no real secrets)
 Always keep modules extensible
 Controllers must always reside in Ayora.Api/Controllers
 Never place business logic in controllers
